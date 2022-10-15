@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+</head>
+<body>
+<script src="vue.js"></script>
+<script src="../axios.min.js"></script>
+<!-- 引入组件库 -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+
+<div id="app">
+<!--    条件查询-->
+    <el-form :inline="true" :model="formInline" class="demo-form-inline">
+        <el-form-item label="id">
+            <el-input v-model="formInline.id"></el-input>
+        </el-form-item>
+        <el-form-item>
+            <el-button type="primary" @click="onSubmit">查询</el-button>
+            <!--    增加-->
+            <el-button type="primary" @click="dialogVisible = true">新增</el-button>
+
+            <el-dialog
+                    title="新增"
+                    :visible.sync="dialogVisible"
+                    width="70%"
+                    :before-close="handleClose">
+                <span>
+<el-form :inline="true" :model="formAdd" class="demo-form-inline">
+  <el-form-item label="id">
+    <el-input v-model="formAdd.id"></el-input>
+  </el-form-item>
+     <el-form-item label="table_name">
+    <el-input v-model="formAdd.tableName"></el-input>
+  </el-form-item>
+     <el-form-item label="class_name">
+    <el-input v-model="formAdd.className"></el-input>
+  </el-form-item>
+
+  <el-form-item>
+    <el-button type="primary" @click="add">创建</el-button>
+  </el-form-item>
+</el-form>
+  </span>
+            </el-dialog>
+        </el-form-item>
+        <el-button type="success" @click="returnAll">返回</el-button>
+    </el-form>
+
+<!--    查询全部-->
+    <template>
+        <el-table
+                :data="tableData"
+                border
+                style="width: 100%">
+            <el-table-column
+                fixed="left"
+                    prop="id"
+                    label="id"
+                    width="40px"
+                   >
+            </el-table-column>
+            <el-table-column
+                    fixed="left"
+                    prop="tableName"
+                    label="table_name"
+                    >
+            </el-table-column>
+            <el-table-column
+                    fixed="left"
+                    prop="tableComment"
+                    label="table_comment"
+                    >
+            </el-table-column>
+            <el-table-column
+                    prop="className"
+                    label="class_name"
+                   >
+            </el-table-column>
+            <el-table-column
+                    prop="tplCategory"
+                    label="tpl_category"
+                   >
+            </el-table-column>
+            <el-table-column
+                    prop="packageName"
+                    label="package_name"
+                    >
+            </el-table-column>
+            <el-table-column
+                    prop="businessName"
+                    label="business_name"
+            >
+            </el-table-column>
+            <el-table-column
+                    prop="functionName"
+                    label="function_name"
+            >
+            </el-table-column>
+            <el-table-column
+                    prop="functionAuthor"
+                    label="function_author"
+            >
+            </el-table-column>
+            <el-table-column
+                    prop="options"
+                    label="options"
+                    width="75px"
+        >
+        </el-table-column>
+            <el-table-column
+                    prop="note"
+                    label="note"
+                    width="55px"
+            >
+            </el-table-column>
+            <el-table-column
+                    prop="createUser"
+                    label="create_user"
+            >
+            </el-table-column>
+
+            <el-table-column
+                    prop="createTime"
+                    label="create_time"
+            >
+            </el-table-column>
+
+            <el-table-column
+                    prop="updateUser"
+                    label="update_user"
+            >
+            </el-table-column>
+
+            <el-table-column
+                    prop="updateTime"
+                    label="update_time"
+            >
+            </el-table-column>
+            <el-table-column
+                    prop="mark"
+                    label="mark"
+                    width="58px"
+            >
+            </el-table-column>
+
+
+            <el-table-column
+                    fixed="right"
+                    label="操作"
+                    width="90px"
+                    >
+                <template slot-scope="scope">
+                    <el-button @click="handleClick(scope.row)" type="text" size="small">删除</el-button>
+                    <el-button type="text" size="small">编辑</el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+    </template>
+</div>
+
+<script>
+    new Vue({
+        el:"#app",
+        created(){
+            this.getAll();
+        },
+        data(){
+            return{
+                tableData: [],
+                formInline: {
+                    id: ''
+                },
+                dialogVisible: false,
+                formAdd:{
+                    id:'',
+                    tableName:'',
+                    className:''
+                }
+
+            }
+        },
+        methods:{
+            handleClick(row) {
+                axios.delete("/gen/"+row.id)
+                console.log(row.id);
+            },
+            getAll() {
+                axios.get("/gen").then((resp)=>{
+                    this.tableData=resp.data.genData;
+                    console.log(resp.data.genData)
+                })
+            },
+            onSubmit() {
+                axios.get("/gen/"+this.formInline.id).then((resp)=>{
+                    this.tableData=resp.data.genData;
+
+                })
+            },
+            handleClose(done) {
+                this.$confirm('确认关闭？')
+                    .then(_ => {
+                        done();
+                    })
+                    .catch(_ => {});
+            },
+            add() {
+             axios.post("/gen",this.formAdd).then((resp)=>{
+this.getAll()
+             })
+
+            },
+            returnAll(){
+                this.getAll()
+            }
+
+        }
+
+    });
+</script>
+</body>
+</html>

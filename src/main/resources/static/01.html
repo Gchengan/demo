@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+</head>
+<body>
+<script src="vue.js"></script>
+<script src="../axios.min.js"></script>
+<!-- 引入组件库 -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+
+<div id="app">
+<template>
+    <el-table
+            ref="multipleTable"
+            :data="tableData"
+            tooltip-effect="dark"
+            style="width: 100%"
+            @selection-change="handleSelectionChange">
+        <el-table-column
+                type="selection"
+                width="55">
+        </el-table-column>
+        <el-table-column
+                prop="id"
+                label="id"
+        width="10px">
+
+            <template slot-scope="scope">{{ scope.row.date }}</template>
+        </el-table-column>
+        <el-table-column
+                prop="table_name"
+                label="table_name"
+             >
+        </el-table-column>
+        <el-table-column
+                prop="table_comment"
+                label="table_comment"
+               >
+        </el-table-column>
+        <el-table-column
+                prop="class_name"
+                label="class_name"
+               >
+        </el-table-column>
+        <el-table-column
+                prop="tpl_category"
+                label="tpl_category"
+
+                >
+        </el-table-column>
+        <el-table-column
+                prop="package_name"
+                label="package_name"
+               >
+        </el-table-column>
+        <el-table-column
+                prop="module_name"
+                label="module_name"
+               >
+        </el-table-column>
+        <el-table-column
+                prop="business_name"
+                label="business_name"
+               >
+        </el-table-column>
+        <el-table-column
+                prop="function_name"
+                label="function_name"
+               >
+        </el-table-column>
+        <el-table-column
+                prop="function_author"
+                label="function_author"
+               >
+        </el-table-column>
+        <el-table-column
+                prop="options"
+                label="options"
+              >
+        </el-table-column>
+        <el-table-column
+                prop="note"
+                label="note"
+               >
+        </el-table-column>
+        <el-table-column
+                prop="create_user"
+                label="create_user"
+               >
+        </el-table-column>
+        <el-table-column
+                prop="create_time"
+                label="create_time"
+               >
+        </el-table-column>
+        <el-table-column
+                prop="update_user"
+                label="update_user"
+              >
+        </el-table-column>
+        <el-table-column
+               prop="update_time"
+                label="update_time"
+               >
+        </el-table-column>
+        <el-table-column
+               prop="mark"
+                label="mark"
+                >
+        </el-table-column>
+
+    </el-table>
+
+</template>
+</div>
+
+<script>
+    new Vue({
+        el:"#app",
+        created(){
+            this.getAll();
+        },
+        data(){
+            return{
+                tableData: [{
+                    id:'',
+                    table_name:'',
+                    table_comment:'',
+                    class_name:'',
+                    tpl_category:'',
+                    package_name:'',
+                    module_name:'',
+                    business_name:'',
+                    function_name:'',
+                    function_author:'',
+                    options:'',
+                    note:'',
+                    create_user:'',
+                    create_time:'',
+                    update_user:'',
+                    update_time:'',
+                    mark:''
+                }]
+            }
+        },
+        multipleSelection: [],
+        methods: {
+
+            handleSelectionChange(val) {
+                this.multipleSelection = val;
+            },
+            getAll(){
+                axios.get("/gen").then((resp)=>{
+                    this.tableData=resp.data.object;
+                    console.log(resp.data.object)
+                })
+            }
+        }
+    });
+</script>
+</body>
+</html>
